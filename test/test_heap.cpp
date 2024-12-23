@@ -1,5 +1,6 @@
 #include "heap.h"
 #include <gtest.h>
+#include <random>
 
 TEST(heap, CanCreateHeap) {
 	ASSERT_NO_THROW(heap<int> heap);
@@ -92,3 +93,34 @@ TEST(heap, MinChildWhenOnly1Child) {
 	EXPECT_EQ(1, heap.minChild(0));
 }
 
+TEST(heap, ILoveCigarettes) {
+	heap<int> heap;
+	std::random_device rd;
+	std::mt19937 mt(rd());
+	std::uniform_real_distribution<double> dist(1, 1001);
+
+	for (int i = 0; i < 200; i++) {
+		heap.push(dist(mt));
+	}
+	//heap.print();
+
+	for (int i = 0; i < 100; i++) {
+		heap.pop();
+	}
+
+	int FLAG = 1;
+	int first, second;
+
+	for (int i = 0; i < 49; i++) {
+		first = heap.top();
+		heap.pop();
+		second = heap.top();
+		if (first > second) {
+			FLAG = 0;
+		}
+
+	}
+
+	//heap.print();
+	EXPECT_EQ(1, FLAG);
+}
